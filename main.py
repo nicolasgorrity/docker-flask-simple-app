@@ -2,7 +2,7 @@ import argparse
 import os
 from typing import List
 
-from sparse_array import StringCounter
+from string_counter import StringCounter
 
 
 def read_strings_from_env(variable: str = 'STRINGS') -> List[str]:

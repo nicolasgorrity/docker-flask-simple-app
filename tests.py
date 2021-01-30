@@ -3,7 +3,7 @@ import string
 import unittest
 from typing import List
 
-from sparse_array import StringCounter
+from string_counter import StringCounter
 
 
 def generate_random_string() -> str:
