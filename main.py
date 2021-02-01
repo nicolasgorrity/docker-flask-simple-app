@@ -1,6 +1,6 @@
 import argparse
 import os
-from typing import List
+from typing import List, Iterable, Dict
 
 from string_counter import StringCounter
 
@@ -17,23 +17,24 @@ def read_strings_from_env(variable: str = 'STRINGS') -> List[str]:
     return raw_variable.split(',')
 
 
-def main(args: argparse.Namespace) -> None:
+def main_app(queries: Iterable[str]) -> Dict[str, int]:
     """ Prints in stdout the number of occurences of each input query in the
     list of strings contained in environment variable STRINGS
 
-    :param args: argparse namespace containing strings attribute
+    :param queries: array of strings to query
+    :return: dictionary matching each query to its result
     """
-    queries = args.queries.split(',')
     strings = read_strings_from_env()
 
     string_counter = StringCounter(strings)
-    counts = string_counter.count_queries(queries)
-
-    print(counts)
+    return string_counter.count_queries(queries)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Simple string counter')
     parser.add_argument('queries', type=str)
 
-    main(parser.parse_args())
+    args = parser.parse_args()
+
+    result = main_app(args.queries.split(','))
+    print(result)

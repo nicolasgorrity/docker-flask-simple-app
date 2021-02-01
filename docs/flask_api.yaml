@@ -1,0 +1,58 @@
+swagger: "2.0"
+info:
+  description: "Simple Python app to count strings in an array."
+  version: "1.0.0"
+  title: "StringCounter API"
+  contact:
+    email: "nicolas.gorrity@gmail.com"
+  license:
+    name: "Unlicensed"
+    url: "https://unlicense.org/"
+host: "localhost"
+basePath: "/"
+tags:
+- name: "app"
+  description: "Simple app for querying a StringCounter"
+schemes:
+- "http"
+paths:
+  /app:
+    get:
+      tags:
+      - "app"
+      summary: "Counts occurrences of query strings"
+      description: "Counts occurrences of query strings in internal array of strings"
+      operationId: "appGetQuery"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "query"
+        in: "query"
+        description: "Strings to query"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+        collectionFormat: "multi"
+      responses:
+        "200":
+          description: "Successful"
+          schema:
+            $ref: "#/definitions/QueryResult"
+        "400":
+          description: "Invalid query parameters"
+        "500":
+          description: "Internal error"
+
+definitions:
+  QueryResult:
+    type: object
+    additionalProperties:
+      type: integer
+    example:
+      ab: 2
+      abc: 1
+      de: 0
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
