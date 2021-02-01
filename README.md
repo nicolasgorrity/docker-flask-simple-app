@@ -63,9 +63,17 @@ export STRINGS=abc,abc,"string with spaces"
 python -m main abc,"string with spaces",wz
 ```
 
-### Using Docker
+This should print `{'abc': 2, 'string with spaces': 1, 'wz': 0}` in the console.
 
-The program in [main.py](./main.py) can be dockerized.
+### Using Docker and CLI
+
+Refer to previous release tagged with 
+[docker-cli](https://github.com/nicolasgorrity/docker-flask-simple-app/tree/docker-cli#using-cli)
+to use the Dockerized Python app with CLI.
+
+### Using Dockerized Flask application
+
+This application can be deployed in a Dockerized Flask API.
 
 Build the image with
 ```shell script
@@ -74,24 +82,32 @@ docker build . -t test_mdm
 
 Run the image with
 ```shell script
-docker run -t test_mdm ab,abc,bc
+docker run -d -p 8000:5000 test_mdm 
 ```
-to run the program with the default strings array defined in the 
-[Dockerfile](./Dockerfile). The queries can be specified as CLI arguments of
-`docker run`. This should print:
-```shell script
-{'ab': 2, 'ab': 1, 'def': 0}
-```
+to redirect the Docker internal port 5000 to your localhost port 8000.
 
-To run the image using a custom strings array, add the following `-e` or `--env`
-parameter to the command:
-```shell script
-docker run -t -e STRINGS=abc,abc,abc test_mdm ab,abc,bc
-```
-which should print
-```shell script
-{'ab': 0, 'abc': 3, 'bc': 0}
-```
+After that, open a web browser and go to <http://localhost:8000>. 
+This should automatically redirect to <http://localhost:8000/docs>, 
+which displays the [Swagger UI](https://swagger.io/tools/swagger-ui/) of the 
+API.
+
+Use the URL <http://localhost:8000/app> to make requests to the app, such as:
+
+<http://localhost:8000/app?query=abc&query=ab&query=de>
+
+to query the strings `["abc", "ab", "de"]` to the application.
+
+It should display the resulting JSON dictionary.
+
+Error messages should be displayed in case of any wrong request.
+
+Some parameters can be controlled using docker environment variables by adding
+to the `docker run` command:
+- `-e STRINGS=abcde,ab,...` to change the strings array to count from
+(default is ab,abc,ab,def)
+- `-e FLASK_PORT=8080` to change the port used by Flask application in the 
+container (default is 5000). 
+Also change the value in the port forwarding `-p 8000:8080`
 
 ## Author
 [Nicolas Gorrity](https://github.com/nicolasgorrity/)
